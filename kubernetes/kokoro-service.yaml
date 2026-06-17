@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kokoro-fastapi
+  namespace: poc-kokoro-fastapi
+  labels:
+    app: kokoro-fastapi
+    autopoc.io/project: kokoro-fastapi
+spec:
+  type: ClusterIP
+  selector:
+    app: kokoro-fastapi
+  ports:
+    - name: http
+      port: 8880
+      targetPort: 8880
+      protocol: TCP

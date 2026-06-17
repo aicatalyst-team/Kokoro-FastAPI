@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kokoro-fastapi
+  namespace: poc-kokoro-fastapi
+  labels:
+    app: kokoro-fastapi
+    autopoc.io/project: kokoro-fastapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kokoro-fastapi
+  template:
+    metadata:
+      labels:
+        app: kokoro-fastapi
+    spec:
+      containers:
+        - name: kokoro-fastapi
+          image: ghcr.io/remsky/kokoro-fastapi-cpu:v0.5.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8880
+              protocol: TCP
+          env:
+            - name: USE_GPU
+              value: "false"
+            - name: DEVICE
+              value: "cpu"
+            - name: DOWNLOAD_MODEL
+              value: "false"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1000m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8880
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8880
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

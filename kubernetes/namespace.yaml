@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: poc-kokoro-fastapi
+  labels:
+    app.kubernetes.io/name: kokoro-fastapi
+    app.kubernetes.io/managed-by: autopoc
