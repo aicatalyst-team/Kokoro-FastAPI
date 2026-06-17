@@ -33,6 +33,12 @@ spec:
               value: "false"
             - name: PYTHONUNBUFFERED
               value: "1"
+            - name: UV_CACHE_DIR
+              value: "/tmp/uv-cache"
+            - name: HOME
+              value: "/tmp"
+            - name: XDG_CACHE_HOME
+              value: "/tmp/.cache"
           resources:
             requests:
               memory: "2Gi"
